@@ -1,10 +1,7 @@
-# variables:
-#   IMAGE_NAME: nanajanashia/demo-app
-#   IMAGE_TAG: python-app-1.0
-
 stages:
   - test
   - build
+  - publish
   # - deploy
 
 run_tests:
@@ -22,17 +19,24 @@ build_image:
     - docker:20.10.16-dind
   variables:
     DOCKER_TLS_CERTDIR: "/certs"
-  before_script:
-    - apk update && apk add --no-cache curl zip unzip
-    - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "/tmp/awscliv2.zip"
-    - unzip /tmp/awscliv2.zip
-    - ./aws/install
-    - /usr/local/bin/aws --version
-  #   - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
   script:
-    - echo we will run docker login here.
-    # - docker build -t $IMAGE_NAME:$IMAGE_TAG .
-    # - docker push $IMAGE_NAME:$IMAGE_TAG
+    - docker build -t py-demo .
+
+publish_image:
+  stage: publish
+  image: docker:20.10.16
+  services:
+    - docker:20.10.16-dind
+  variables:
+    DOCKER_TLS_CERTDIR: "/certs"
+  before_script:
+    - export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+    - export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+    - apk update && apk add --no-cache aws-cli
+    - aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin 522986700920.dkr.ecr.eu-west-1.amazonaws.com
+  script:
+    - docker tag py-demo:latest 522986700920.dkr.ecr.eu-west-1.amazonaws.com/py-demo:latest
+    - docker push 522986700920.dkr.ecr.eu-west-1.amazonaws.com/py-demo:latest
 
 # deploy:
 #   stage: deploy
