@@ -1,7 +1,8 @@
 stages:
   - test
   - build_publish
-  # - deploy
+  - deploy
+  - e2e
 
 run_tests:
   stage: test
@@ -29,12 +30,19 @@ build_&_publish_image:
     - docker tag py-demo:latest 522986700920.dkr.ecr.eu-west-1.amazonaws.com/py-demo:latest
     - docker push 522986700920.dkr.ecr.eu-west-1.amazonaws.com/py-demo:latest
 
-# deploy:
-#   stage: deploy
-#   before_script:
-#     - chmod 400 $SSH_KEY
-#   script:
-#     - ssh -o StrictHostKeyChecking=no -i $SSH_KEY root@161.35.223.117 "
-#         docker login -u $REGISTRY_USER -p $REGISTRY_PASS &&
-#         docker ps -aq | xargs docker stop | xargs docker rm &&
-#         docker run -d -p 5000:5000 $IMAGE_NAME:$IMAGE_TAG"
+deploy:
+  stage: deploy
+  before_script:
+    - chmod 400 $SSH_KEY
+  script:
+    - scp -r -i $SSH_KEY deploy/docker-compose.yml $REMOTE_USER@$REMOTE_HOST:~/py-app
+    - ssh -o StrictHostKeyChecking=no -i $SSH_KEY $REMOTE_USER@$REMOTE_HOST "
+        aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin 522986700920.dkr.ecr.eu-west-1.amazonaws.com &&
+        cd ~/py-app &&
+        docker compose down -v &&
+        docker compose up -d
+
+run_e2e_test:
+  stage: e2e
+  script:
+    - curl REMOTE_HOST
