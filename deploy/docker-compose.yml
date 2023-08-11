@@ -3,7 +3,6 @@ version: '3.9'
 services:
   app:
     image: 522986700920.dkr.ecr.eu-west-1.amazonaws.com/py-demo:latest
-    container_name: py-app
     restart: always
     expose: 
       - 8080
