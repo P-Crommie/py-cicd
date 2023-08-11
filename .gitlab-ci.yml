@@ -47,4 +47,4 @@ deploy:
 run_e2e_test:
   stage: e2e
   script:
-    - curl REMOTE_HOST
+    - curl http://$REMOTE_HOST
