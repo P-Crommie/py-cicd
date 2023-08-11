@@ -42,7 +42,7 @@ deploy:
         mv -f docker-compose.yml nginx.conf ~/py-demo/ &&
         cd ~/py-demo &&
         docker compose down -v &&
-        docker compose up -d"
+        docker compose up -d --scale app=5"
 
 run_e2e_test:
   stage: e2e
