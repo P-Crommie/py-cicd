@@ -35,7 +35,7 @@ deploy:
   before_script:
     - chmod 400 $SSH_KEY
   script:
-    - scp -r -o StrictHostKeyChecking=no -i $SSH_KEY deploy/docker-compose.yml $REMOTE_USER@$REMOTE_HOST:~/py-app
+    - scp -r -o StrictHostKeyChecking=no -i $SSH_KEY deploy/docker-compose.yml $REMOTE_USER@$REMOTE_HOST:/home/ubuntu/py-app/
     - ssh -o StrictHostKeyChecking=no -i $SSH_KEY $REMOTE_USER@$REMOTE_HOST "
         aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin 522986700920.dkr.ecr.eu-west-1.amazonaws.com &&
         cd ~/py-app &&
