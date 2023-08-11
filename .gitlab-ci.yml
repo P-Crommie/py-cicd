@@ -24,6 +24,9 @@ build_image:
 
 publish_image:
   stage: publish
+  needs:
+    - job: build_image
+      artifacts: true
   image: docker:20.10.16
   services:
     - docker:20.10.16-dind
