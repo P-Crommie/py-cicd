@@ -1,6 +1,6 @@
 # py-cicd: DevOps CI/CD Project with GitLab CI
 
-Welcome to the `py-cicd` project, a comprehensive example of a DevOps Continuous Integration and Continuous Deployment (CI/CD) pipeline using GitLab CI. This project automates the testing, building, publishing, and deploying processes of a Python Flask application. The demo Python Flask app used in this project can be found at [https://github.com/benc-uk/python-demoapp](https://github.com/benc-uk/python-demoapp).
+Welcome to the `py-cicd` project, a comprehensive example of a DevOps Continuous Integration and Continuous Deployment (CI/CD) pipeline using GitLab CI. This project automates the testing, building, publishing, and deploying processes of a Python Flask application. The demo Python Flask app used in this project can be found at [python-demoapp]([https://github.com/benc-uk/python-demoapp](https://github.com/benc-uk/python-demoapp)).
 
 ## Project Structure
 
